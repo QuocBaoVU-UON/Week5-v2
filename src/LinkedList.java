@@ -95,7 +95,19 @@ public  class LinkedList<E> implements ListADT<E>{
      * @param element - element whose presence in this list is to be tested.
      * @return true if this list contains the specified element.
      */
-    public boolean contains(E element);
+    public boolean contains(E element){
+        boolean haveELement = false;
+        if (element == null){return false;}
+        Node tempNode = firstNode; 
+        for(int step = 0; step < size  ; step ++ ){
+            if(tempNode.next.val.equals(element)){
+                 haveELement = true;
+                 break;
+            }
+            tempNode = tempNode.next;
+        }
+        return haveELement;
+    }
 
     /**
      * Returns the element at the specified position in this list.
@@ -123,8 +135,11 @@ public  class LinkedList<E> implements ListADT<E>{
      * 
      * @return the head of this list
      */
-    public E head();
-
+    public E head(){
+        if(size == 0){ throw new NoSuchElementException();}
+        return firstNode.next.val; 
+        
+    }
     /**
      * Retrieves, but does not remove, the tail (last element) of this list.
      * 
@@ -133,7 +148,12 @@ public  class LinkedList<E> implements ListADT<E>{
      * 
      * @return the tail of this list
      */
-    public E tail();
+    public E tail(){
+        if(size == 0){ throw new NoSuchElementException();}
+        return lastNode.prev.val; 
+        
+    }
+    
 
     /**
      * Removes and returns the first element from this list.
@@ -232,5 +252,10 @@ public  class LinkedList<E> implements ListADT<E>{
      * Precondition: None
      * Postcondition: The list is empty.
      */
-    public void clear();
+    public void clear(){
+        firstNode.next = lastNode; 
+        lastNode.prev = firstNode;
+        size = 0;
+        System.out.println("List have cleared.");
+    }
 }
