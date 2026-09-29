@@ -1,4 +1,6 @@
 import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.*;
 
 /**
  * Interface for a generic linked list that contains references to both the head and tail.
@@ -33,7 +35,20 @@ public  class LinkedList<E> implements ListADT<E>{
      */
     @Override 
     public void add(int index, E element){
-        if (element.equals(null)){return ;}
+        if(element == null || index > size|| index < 0){
+            return;
+        }
+       Node currentNode = firstNode;
+       for(int step = 0; step < index + 1; step ++){
+            currentNode = currentNode.next;
+       }
+        Node newNode = new Node(element);
+        newNode.next = currentNode;
+        newNode.prev = currentNode.prev;
+        currentNode.prev.next = newNode;
+        currentNode.prev = newNode;
+        size ++;
+       
     }
 
     /**
@@ -91,7 +106,14 @@ public  class LinkedList<E> implements ListADT<E>{
      * @param index - index of the element to return.
      * @return the element at the specified position in this list.
      */
-    public E get(int index);
+    public E get(int index){
+         if(size == 0 ||  index >= size || index < 0  ){throw new NoSuchElementException();}
+         Node currentNode = firstNode;
+         for(int step  = 0; step < index + 1 ; step ++){
+            currentNode = currentNode.next;
+         }
+         return currentNode.val;
+    }
 
     /**
      * Retrieves, but does not remove, the head (first element) of this list.
@@ -122,7 +144,17 @@ public  class LinkedList<E> implements ListADT<E>{
      * 
      * @return The first element from this list.
      */
-    public E removeFirst();
+    public E removeFirst(){
+        if( size == 0 ){throw new NoSuchElementException();}
+        Node tempNode = firstNode.next;
+        firstNode.next = tempNode.next;
+        tempNode.next.prev = firstNode;
+        tempNode.next = null;
+        tempNode.prev = null;
+        size -- ;
+        return tempNode.val;
+
+    }
 
     /**
      * Removes and returns the last element from this list.
@@ -133,7 +165,16 @@ public  class LinkedList<E> implements ListADT<E>{
      * 
      * @return The last element from this list.
      */
-    public E removeLast();
+    public E removeLast(){
+          if( size == 0 ){throw new NoSuchElementException();}
+        Node tempNode = lastNode.prev;
+        lastNode.prev = tempNode.prev;
+        tempNode.prev.next = lastNode;
+        tempNode.next = null;
+        tempNode.prev = null;
+        size -- ;
+        return tempNode.val;
+    }
 
     /**
      * Removes and returns the item at the specified index from this list. 
@@ -145,7 +186,21 @@ public  class LinkedList<E> implements ListADT<E>{
      * @param index - the index of the element to be removed.
      * @return The element that was (previously) at the specified index.
      */
-    public E remove(int index);
+    @Override 
+    public E remove(int index){
+         if(size == 0 ||  index >= size || index < 0  ){throw new NoSuchElementException();}
+        Node currentNode = firstNode;
+        for (int step = 0; step < index +1; step++) {
+            currentNode = currentNode.next;
+        }
+        currentNode.prev.next = currentNode.next;
+        currentNode.next.prev = currentNode.prev;
+        currentNode.next = null;
+        currentNode.prev = null;
+        size --;
+        return currentNode.val;
+        
+    }
 
     /**
      * Returns true if this list contains no elements.
